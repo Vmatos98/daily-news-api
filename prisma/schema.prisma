@@ -11,21 +11,22 @@ datasource db {
 }
 
 model User {
-  id          Int      @id @default(autoincrement())
-  name        String
-  email       String
-  password    String
-  createdAt   DateTime @default(now())
-  userCategory UserCategory[]
-  save  NewsSave[]
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  password      String
+  createdAt     DateTime @default(now())
+  userCategory  UserCategory[]
+  save          NewsSave[]
+  votes         Votes[]
   }
 
 model Category {
-  id          Int      @id @default(autoincrement())
-  name        String
-  createdAt   DateTime @default(now())
-  userCategory UserCategory[]
-  news        News[]
+  id            Int      @id @default(autoincrement())
+  name          String
+  createdAt     DateTime @default(now())
+  userCategory  UserCategory[]
+  news          News[]
 }
 
 model UserCategory {
@@ -35,20 +36,34 @@ model UserCategory {
   category    Category @relation(fields: [categoryId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
+  @@unique([userId, categoryId], name: "user_category_unique")
 }
 
 model News{
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  image       String
-  url         String
-  hotVotes    Int
-  coldVotes   Int
-  categoryId   Int
-  category     Category @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime @default(now())   
-  save  NewsSave[]   
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String
+  image         String
+  url           String
+  score         Int      @default(0)
+  categoryId    Int
+  category      Category @relation(fields: [categoryId], references: [id])
+  createdAt     DateTime @default(now())  
+  publicatedAt  String    
+  save          NewsSave[]  
+  votes         Votes[]
+  @@unique(fields: [categoryId, id]) 
+}
+
+model Votes{
+  id            Int      @id @default(autoincrement())
+  userId        Int      
+  newsId        Int 
+  type          VoteType     
+  user          User     @relation(fields: [userId], references: [id])
+  news          News     @relation(fields: [newsId], references: [id])
+  createdAt     DateTime @default(now())  
+  @@unique([userId, newsId], name: "votes_unique")
 }
 
 model NewsSave {
@@ -58,4 +73,9 @@ model NewsSave {
   news        News     @relation(fields: [newsId], references: [id])
   user        User     @relation(fields: [userId], references: [id])
   createdAt   DateTime @default(now())
+}
+
+enum VoteType {
+  HOT
+  COLD
 }

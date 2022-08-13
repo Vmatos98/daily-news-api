@@ -7,10 +7,16 @@ async function login(req: Request, res: Response) {
     const { email, password } = req.body;
     const user = await User.findUser({email, password});
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {expiresIn: 60*60*12 });
-    res.status(200).send({ token });
+    res.cookie('token', token, { httpOnly: true, sameSite: "none", secure: true });
+    res.status(200).send(token);
 }
 
 async function sigin(req: Request, res: Response) {
+    const { email, password } = req.body;
+    const user = await User.findUser({email, password});
+    if(user){
+        throw { type: "conflict", message: "User already exists"}
+    }
     await User.createUser(req.body);
     res.sendStatus(201);
 }

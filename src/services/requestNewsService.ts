@@ -1,18 +1,28 @@
 import axios from "axios";
 
-const api = axios.create({
-    baseURL: "https://newsapi.org/v2",
-});
+import * as newsService from "./newsService.js";
 
-export async function getNews( category: string) {
-    const API_KEY = process.env.API_KEY||"";
-    const url= 'https://newscatcher.p.rapidapi.com/v1/search_enterprise',
-    params= {q: category, lang: 'pt', sort_by: 'relevancy', page: '1', media: 'True'},
+const url= 'https://newscatcher.p.rapidapi.com/v1/search_enterprise',
     headers= {
-        'X-RapidAPI-Key': API_KEY,
+        'X-RapidAPI-Key': process.env.API_KEY,
         'X-RapidAPI-Host': 'newscatcher.p.rapidapi.com'
-    }
+    };
 
-    const response = await axios.get(url, {params: params, headers: headers});
-    return response.data;
+export async function requestNews( id:number) {
+    const category = await newsService.getCategory(id);
+    const params= {q: category.name, lang: 'pt', sort_by: 'relevancy', page: '1', media: 'True', search_in: 'summary', from: 'yesterday 0:02 am',};
+    const {data} = await axios.get(url, {params: params, headers: headers});
+    for(let i = 0; i<10; i++){
+        const Element = data.articles[i];
+        const newsFormat={
+            title: Element.title,
+            description: Element.summary,
+            image: Element.media,
+            url: Element.link,
+            categoryId: id,
+            publicatedAt: Element.published_date 
+        }
+        await newsService.insertNews(newsFormat);
+    }
 }
+
