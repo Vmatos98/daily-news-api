@@ -14,5 +14,6 @@ export default async function jwtValidateMiddleware(req: Request, res: Response,
     console.log("validate");
     
     res.locals.userId= decoded;
+    console.log(res.locals.userId);
     next();
 }

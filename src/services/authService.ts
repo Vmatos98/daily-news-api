@@ -7,10 +7,8 @@ export type searchUserData = Omit<createUserData, "name">;
 
 async function findUser(searchUserData:searchUserData){
     const user = await authRepository.findUser(searchUserData);
-    if(user){
         return user;
-    }
-    throw { type: "unauthorized", message: "invalid email or password" };
+    // throw { type: "unauthorized", message: "invalid email or password" };
 }
 
 async function createUser(createUserData:createUserData){
