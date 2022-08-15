@@ -17,7 +17,7 @@ function login(req, res) {
             throw { type: "unauthorized", message: "invalid email or password" };
         }
         const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 12 });
-        // Cookies.set('token', token, { expires: 1 });
+        Cookies.set('token', token, { expires: 1 });
         res.cookie('token', token, { httpOnly: true, sameSite: "none", secure: true });
         delete user.password;
         delete user.createdAt;

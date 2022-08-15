@@ -10,6 +10,14 @@ async function findUser(searchUserData:searchUserData){
     });
 }
 
+async function findUserById(id:number){
+    return await prisma.user.findFirst({
+        where: {
+            id: id
+        }
+    });
+}
+
 async function insertUser(createUserData:createUserData){
     return await prisma.user.create({
         data: 
@@ -19,5 +27,6 @@ async function insertUser(createUserData:createUserData){
 
 export {
     findUser,
-    insertUser
+    insertUser,
+    findUserById
 };

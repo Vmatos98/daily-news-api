@@ -11,6 +11,11 @@ async function findUser(searchUserData:searchUserData){
     // throw { type: "unauthorized", message: "invalid email or password" };
 }
 
+async function findUserById(id:number){
+    const user = await authRepository.findUserById(id);
+    return user;
+}
+
 async function createUser(createUserData:createUserData){
     const { email, name} = createUserData;
     const password = bcrypt.hashSync(createUserData.password, 10);
@@ -21,5 +26,6 @@ async function createUser(createUserData:createUserData){
 
 export {
     findUser,
-    createUser
+    createUser,
+    findUserById
 };

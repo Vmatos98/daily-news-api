@@ -3,7 +3,9 @@ import jwt from "jsonwebtoken";
 
 export default async function jwtValidateMiddleware(req: Request, res: Response, next: NextFunction) {
 
-    const token = req.cookies.token;
+    // const token = req.cookies.token;
+    const value = req.headers["authorization"];
+    const token = value?.split("Bearer ").join("").toString();
     if (!token) {
         throw { type: "unauthorized", message: "api key is missing" };
     }

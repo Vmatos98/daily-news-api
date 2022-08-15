@@ -12,13 +12,14 @@ async function login(req: Request, res: Response) {
         throw { type: "unauthorized", message: "invalid email or password" };
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {expiresIn: 60*60*12 });
-    // Cookies.set('token', token, { expires: 1 });
-    res.cookie('token', token, { httpOnly: true, sameSite: "none", secure: true });
+    Cookies.set('token', token, { expires: 1 });
+    res.cookie('token', token, { httpOnly: true});
+    console.log(req.cookies.id);
+    
     delete user.password;
     delete user.createdAt;
     console.log(user);
-    
-    res.status(200).send(user);
+    res.status(200).send({user, token});
 }
 
 async function sigin(req: Request, res: Response) {
@@ -30,11 +31,19 @@ async function sigin(req: Request, res: Response) {
     const response = await User.createUser(req.body);
     const token = jwt.sign({ userId: response.id }, process.env.JWT_SECRET, {expiresIn: 60*60*12 });
     res.cookie('token', token, { httpOnly: true, sameSite: "none", secure: true });
-    res.sendStatus(201);
+    res.status(201).send(token);
 }
 
 async function sessionValidation (req: Request, res: Response) {
-    res.status(200).send(res.locals.userId);
+    const id = res.locals.userId.userId;
+    const user = await User.findUserById(+id);
+    if(!user){
+        throw { type: "unauthorized", message: "invalid api key" };
+    }
+    delete user.password;
+    delete user.createdAt;
+    console.log(user);
+    res.status(200).send(user);
 }
 
 export {

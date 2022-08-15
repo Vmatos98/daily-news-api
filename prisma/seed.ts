@@ -2,9 +2,17 @@ import prisma from "../src/config/database.js"
 import bcrypt from "bcrypt";
 
 const categories = [
-    {name: 'anime'},
-    {name: 'tech'},
-    {name: 'science'},
+    // {name: 'anime'},
+    {name: 'tecnologia'},
+    {name: 'ciencias'},
+    {name: 'filmes'},
+    {name: 'finanças'},
+    {name: 'games'},
+    {name: 'moda'},
+    {name: 'musica'},
+    {name: 'noticias'},
+    {name: 'saúde'},
+    {name: 'politica'},
 ]
 
 async function main(){

@@ -12,7 +12,7 @@ export async function requestNews( id:number) {
     const category = await newsService.getCategory(id);
     const params= {q: category.name, lang: 'pt', sort_by: 'relevancy', page: '1', media: 'True', search_in: 'summary', from: 'yesterday 0:02 am',};
     const {data} = await axios.get(url, {params: params, headers: headers});
-    for(let i = 0; i<10; i++){
+    for(let i = 9; i>=0; i--){
         const Element = data.articles[i];
         const newsFormat={
             title: Element.title,
