@@ -31,6 +31,7 @@ async function sigin(req: Request, res: Response) {
     const response = await User.createUser(req.body);
     const token = jwt.sign({ userId: response.id }, process.env.JWT_SECRET, {expiresIn: 60*60*12 });
     res.cookie('token', token, { httpOnly: true, sameSite: "none", secure: true });
+    console.log(token);
     res.status(201).send(token);
 }
 

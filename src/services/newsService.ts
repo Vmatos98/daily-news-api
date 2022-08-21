@@ -9,7 +9,6 @@ export type createCategoryData = Omit<Category,"id"|"createdAt">;
 
 export async function getCategories(id:number){
     const categories = await repository.getCategories(id);
-    console.log(categories);
     if(categories){
         return categories;
     }
@@ -63,7 +62,6 @@ export async function getVotesByNews(news:any){
         const aux = {...news[i], votes};
         result.push(aux);
     }
-    console.log(result)
     return result;
 }
 

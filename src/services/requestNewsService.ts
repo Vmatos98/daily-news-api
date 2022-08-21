@@ -10,10 +10,12 @@ const url= 'https://newscatcher.p.rapidapi.com/v1/search_enterprise',
 
 export async function requestNews( id:number) {
     const category = await newsService.getCategory(id);
-    const params= {q: category.name, lang: 'pt', sort_by: 'relevancy', page: '1', media: 'True', search_in: 'summary', from: 'yesterday 0:02 am',};
+    const params= {q: category.name, lang: 'pt', sort_by: 'relevancy', page: '1', media: 'True', page_size: '10', search_in: 'summary', from: 'yesterday 0:02 am',};
     const {data} = await axios.get(url, {params: params, headers: headers});
+    console.log("elemente data:", data);
     for(let i = 9; i>=0; i--){
         const Element = data.articles[i];
+        if(Element){
         const newsFormat={
             title: Element.title,
             description: Element.summary,
@@ -23,6 +25,7 @@ export async function requestNews( id:number) {
             publicatedAt: Element.published_date 
         }
         await newsService.insertNews(newsFormat);
+    }
     }
 }
 
