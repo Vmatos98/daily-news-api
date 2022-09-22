@@ -13,8 +13,6 @@ async function removeUserCategory(data:manipulationUserCategoryData){
 }
 
 async function insertUserCategory(data:manipulationUserCategoryData){
-    console.log("insert", data);
-    
     return await prisma.userCategory.create({
         data: {
             userId: data.userId,

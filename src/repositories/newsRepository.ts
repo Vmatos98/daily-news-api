@@ -3,7 +3,6 @@ import prisma from "../config/database.js";
 import {createNewsData} from "../services/newsService.js"
 
 async function getCategories(id:number){
-    console.log(id)
     return await prisma.userCategory.findMany({
         where: {
             userId: id

@@ -25,11 +25,9 @@ export async function removeUserCategory(data:manipulationUserCategoryData){
 }
 
 export async function createManycategories(data:any){
-    console.log("array");
     
     try {
         for(let i of data){
-            console.log("dado", i)
             const {userId, categoryId} = i;
             await insertUserCategory({userId, categoryId})
         }
@@ -39,8 +37,6 @@ export async function createManycategories(data:any){
 }
 
 export async function insertUserCategory(data:manipulationUserCategoryData){
-    console.log("data", data);
-    
     try {
         await repository.insertUserCategory(data);
     } catch (error) {
